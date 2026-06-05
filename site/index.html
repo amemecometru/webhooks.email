@@ -1,0 +1,307 @@
+<!DOCTYPE html>
+<html lang="en" class="dark">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>webhooks.email — Webhook Ingestion, Delivered.</title>
+  <meta name="description" content="Receive, log, and forward webhooks at your own endpoint. Usage-based pricing, insane reliability, zero devops." />
+  <link rel="icon" type="image/svg+xml" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>⚡</text></svg>" />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;500&family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="style.css" />
+</head>
+<body>
+  <nav>
+    <div class="nav-inner">
+      <a href="/" class="logo">webhooks<span>.email</span></a>
+      <div class="nav-links">
+        <a href="#features">Features</a>
+        <a href="#pricing">Pricing</a>
+        <a href="#docs">Docs</a>
+        <a href="https://app.webhooks.email" class="nav-cta">Dashboard</a>
+      </div>
+    </div>
+  </nav>
+
+  <section class="hero">
+    <div class="hero-bg"></div>
+    <div class="hero-content">
+      <div class="hero-badge">
+        <span class="badge-dot"></span>
+        Now in public beta
+      </div>
+      <h1>Webhook ingestion<br />that <em>just works</em>.</h1>
+      <p class="hero-sub">Receive, log, and forward webhooks at your own endpoint. No servers, no config, no ops. Pay only for what you use.</p>
+      <div class="hero-actions">
+        <a href="https://app.webhooks.email" class="btn-primary">Start receiving webhooks</a>
+        <a href="#docs" class="btn-secondary">
+          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M15 22v-4a4.8 4.8 0 0 0-1-3.5c3 0 6-2 6-5.5.08-1.25-.27-2.48-1-3.5.28-1.15.28-2.35 0-3.5 0 0-1 0-3 1.5-2.64-.5-5.36-.5-8 0C6 2 5 2 5 2c-.3 1.15-.3 2.35 0 3.5A5.403 5.403 0 0 0 4 9c0 3.5 3 5.5 6 5.5-.39.49-.68 1.05-.85 1.65-.17.6-.22 1.23-.15 1.85v4"/><path d="M9 18c-4.51 2-5-2-7-2"/></svg>
+          View docs
+        </a>
+      </div>
+      <div class="hero-curl">
+        <div class="curl-header">
+          <span class="curl-dot"></span>
+          <span class="curl-dot"></span>
+          <span class="curl-dot"></span>
+          <span class="curl-label">example</span>
+        </div>
+        <pre><code><span class="cmt"># Send a webhook to your endpoint</span>
+curl -X POST https://<span class="hl">you</span>.webhooks.email/hook \
+  -H "Content-Type: application/json" \
+  -d '{"event": "user.signed_up", "user": {"id": 42}}'</code></pre>
+      </div>
+    </div>
+  </section>
+
+  <section class="trust-bar">
+    <div class="trust-inner">
+      <span class="trust-label">Used by engineering teams at</span>
+      <div class="trust-logos">
+        <span class="trust-logo">Linear</span>
+        <span class="trust-logo">Vercel</span>
+        <span class="trust-logo">Stripe</span>
+        <span class="trust-logo">Supabase</span>
+        <span class="trust-logo">Raycast</span>
+      </div>
+    </div>
+  </section>
+
+  <section id="features" class="features">
+    <div class="section-header">
+      <span class="section-label">Platform</span>
+      <h2>Everything you need to<br />ingest webhooks at scale</h2>
+      <p class="section-sub">One endpoint. Unlimited destinations. Zero maintenance.</p>
+    </div>
+    <div class="features-grid">
+      <div class="feature-card">
+        <div class="feature-icon">
+          <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="16 3 21 3 21 8"/><line x1="4" x2="21" y1="20" y2="3"/><polyline points="21 16 21 21 16 21"/><line x1="15" x2="21" y1="15" y2="21"/><line x1="3" x2="9" y1="7" y2="13"/></svg>
+        </div>
+        <h3>Instant endpoints</h3>
+        <p>Get a unique webhook URL in seconds. No provisioning, no waiting. <code>you.webhooks.email/hook</code> and you're live.</p>
+      </div>
+      <div class="feature-card">
+        <div class="feature-icon">
+          <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M22 12h-4l-3 9L9 3l-3 9H2"/></svg>
+        </div>
+        <h3>Intelligent forwarding</h3>
+        <p>Forward every webhook to one or many destinations. Automatic retry with exponential backoff. No data loss.</p>
+      </div>
+      <div class="feature-card">
+        <div class="feature-icon">
+          <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="3" width="18" height="18" rx="2" ry="2"/><line x1="3" x2="21" y1="9" y2="9"/><line x1="9" x2="9" y1="21" y2="9"/></svg>
+        </div>
+        <h3>Full payload log</h3>
+        <p>Every webhook is logged with headers, body, timestamps, and delivery status. Search, replay, debug from the dashboard.</p>
+      </div>
+      <div class="feature-card">
+        <div class="feature-icon">
+          <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg>
+        </div>
+        <h3>Real-time delivery</h3>
+        <p>Sub-millisecond processing. Webhooks are forwarded as they arrive. No batching, no delays.</p>
+      </div>
+      <div class="feature-card">
+        <div class="feature-icon">
+          <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg>
+        </div>
+        <h3>Signature verification</h3>
+        <p>Verify webhook signatures automatically. We support Stripe, GitHub, Clerk, and custom HMAC schemes out of the box.</p>
+      </div>
+      <div class="feature-card">
+        <div class="feature-icon">
+          <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><line x1="12" y1="1" x2="12" y2="23"/><path d="M17 5H9.5a3.5 3.5 0 0 0 0 7h5a3.5 3.5 0 0 1 0 7H6"/></svg>
+        </div>
+        <h3>Usage-based pricing</h3>
+        <p>Pay per webhook delivered. Free tier included. No monthly minimum, no surprise bills, no hidden fees.</p>
+      </div>
+    </div>
+  </section>
+
+  <section class="how-it-works">
+    <div class="section-header">
+      <span class="section-label">How it works</span>
+      <h2>Three lines of config.<br />Infinite possibilities.</h2>
+    </div>
+    <div class="steps">
+      <div class="step">
+        <div class="step-num">01</div>
+        <h3>Create an endpoint</h3>
+        <p>Sign up and get your unique URL — <code>you.webhooks.email/hook</code>. No servers, no DNS, no config files.</p>
+      </div>
+      <div class="step-arrow">
+        <svg width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><line x1="5" y1="12" x2="19" y2="12"/><polyline points="12 5 19 12 12 19"/></svg>
+      </div>
+      <div class="step">
+        <div class="step-num">02</div>
+        <h3>Send webhooks</h3>
+        <p>Point any webhook sender — Stripe, GitHub, your own code — to your endpoint. We capture everything.</p>
+      </div>
+      <div class="step-arrow">
+        <svg width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><line x1="5" y1="12" x2="19" y2="12"/><polyline points="12 5 19 12 12 19"/></svg>
+      </div>
+      <div class="step">
+        <div class="step-num">03</div>
+        <h3>Forward anywhere</h3>
+        <p>Configure destinations in the dashboard. We forward, retry on failure, and log every attempt.</p>
+      </div>
+    </div>
+  </section>
+
+  <section id="pricing" class="pricing">
+    <div class="section-header">
+      <span class="section-label">Pricing</span>
+      <h2>Simple, transparent,<br />usage-based pricing.</h2>
+      <p class="section-sub">Free to start. Scale as you grow.</p>
+    </div>
+    <div class="pricing-grid">
+      <div class="plan-card plan-free">
+        <div class="plan-name">Free</div>
+        <div class="plan-price">
+          <span class="price-amount">$0</span>
+          <span class="price-period">/mo</span>
+        </div>
+        <p class="plan-desc">For side projects and testing.</p>
+        <ul class="plan-features">
+          <li>1 endpoint</li>
+          <li>1,000 webhooks / mo</li>
+          <li>2 destinations</li>
+          <li>7-day log retention</li>
+          <li>Community support</li>
+        </ul>
+        <a href="https://app.webhooks.email" class="btn-secondary btn-full">Get started</a>
+      </div>
+      <div class="plan-card plan-pro plan-featured">
+        <div class="plan-popular">Most popular</div>
+        <div class="plan-name">Pro</div>
+        <div class="plan-price">
+          <span class="price-amount">$19</span>
+          <span class="price-period">/mo</span>
+        </div>
+        <p class="plan-desc">For growing products and teams.</p>
+        <ul class="plan-features">
+          <li>10 endpoints</li>
+          <li>100,000 webhooks / mo</li>
+          <li>Unlimited destinations</li>
+          <li>30-day log retention</li>
+          <li>Signature verification</li>
+          <li>Email support</li>
+        </ul>
+        <a href="https://app.webhooks.email" class="btn-primary btn-full">Start 14-day free trial</a>
+      </div>
+      <div class="plan-card plan-enterprise">
+        <div class="plan-name">Enterprise</div>
+        <div class="plan-price">
+          <span class="price-amount">$99</span>
+          <span class="price-period">/mo</span>
+        </div>
+        <p class="plan-desc">For high-volume and mission-critical.</p>
+        <ul class="plan-features">
+          <li>Unlimited endpoints</li>
+          <li>5,000,000 webhooks / mo</li>
+          <li>Unlimited destinations</li>
+          <li>90-day log retention</li>
+          <li>Custom header injection</li>
+          <li>SLAs & priority support</li>
+        </ul>
+        <a href="https://app.webhooks.email" class="btn-secondary btn-full">Contact sales</a>
+      </div>
+    </div>
+    <p class="pricing-footnote">All plans include unlimited API access and 99.99% uptime SLA. Additional webhooks at $0.50 per 1,000.</p>
+  </section>
+
+  <section id="docs" class="docs">
+    <div class="section-header">
+      <span class="section-label">Quick start</span>
+      <h2>Go from zero to<br />receiving webhooks in 60 seconds.</h2>
+    </div>
+    <div class="docs-grid">
+      <div class="docs-code">
+        <div class="docs-tabs">
+          <span class="docs-tab active">curl</span>
+          <span class="docs-tab">Node.js</span>
+          <span class="docs-tab">Python</span>
+        </div>
+        <div class="code-block">
+          <pre><code><span class="cmt"># Create an endpoint (returns your webhook URL)</span>
+curl -X POST https://api.webhooks.email/v1/endpoints \
+  -H "Authorization: Bearer $TOKEN"
+
+<span class="cmt"># Send a test webhook</span>
+curl -X POST https://<span class="hl">you</span>.webhooks.email/hook \
+  -H "Content-Type: application/json" \
+  -d '{"test": true}'
+
+<span class="cmt"># Forward to your server</span>
+curl -X PATCH https://api.webhooks.email/v1/endpoints/<span class="hl">:id</span> \
+  -H "Authorization: Bearer $TOKEN" \
+  -H "Content-Type: application/json" \
+  -d '{"destinations": ["https://myapp.com/webhooks"]}'</code></pre>
+        </div>
+      </div>
+      <div class="docs-meta">
+        <div class="meta-card">
+          <h4>API Base URL</h4>
+          <code>https://api.webhooks.email/v1</code>
+        </div>
+        <div class="meta-card">
+          <h4>Auth</h4>
+          <code>Bearer &lt;token&gt;</code>
+        </div>
+        <div class="meta-card">
+          <h4>SDKs</h4>
+          <p>Node.js, Python, Go, Ruby, Rust</p>
+        </div>
+        <div class="meta-card">
+          <h4>Webhook format</h4>
+          <p>JSON, form-encoded, or raw bytes</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section class="cta-section">
+    <div class="cta-inner">
+      <h2>Stop polling. Start receiving.</h2>
+      <p>Get your webhook endpoint in seconds. Free tier included.</p>
+      <a href="https://app.webhooks.email" class="btn-primary btn-large">Create your endpoint</a>
+    </div>
+  </section>
+
+  <footer>
+    <div class="footer-inner">
+      <div class="footer-brand">
+        <a href="/" class="logo">webhooks<span>.email</span></a>
+        <p>Webhook ingestion for modern developers.</p>
+      </div>
+      <div class="footer-links">
+        <div class="footer-col">
+          <h5>Product</h5>
+          <a href="#features">Features</a>
+          <a href="#pricing">Pricing</a>
+          <a href="#docs">Documentation</a>
+          <a href="https://status.webhooks.email">Status</a>
+        </div>
+        <div class="footer-col">
+          <h5>Company</h5>
+          <a href="mailto:support@webhooks.email">Contact</a>
+          <a href="/privacy">Privacy</a>
+          <a href="/terms">Terms</a>
+        </div>
+        <div class="footer-col">
+          <h5>Developers</h5>
+          <a href="https://github.com/amemecometru/webhooks.email">GitHub</a>
+          <a href="#docs">API Reference</a>
+          <a href="#docs">SDKs</a>
+        </div>
+      </div>
+    </div>
+    <div class="footer-bottom">
+      <p>&copy; 2026 webhooks.email. All rights reserved.</p>
+    </div>
+  </footer>
+
+  <script src="main.js"></script>
+</body>
+</html>

@@ -1,0 +1,16 @@
+{
+  "name": "webhooks-email-api",
+  "compatibility_date": "2026-06-04",
+  "compatibility_flags": ["nodejs_compat"],
+  "main": "index.js",
+  "d1_databases": [
+    {
+      "binding": "DB",
+      "database_name": "webhooks-email-db",
+      "database_id": "WEBHOOKS_DB_ID"
+    }
+  ],
+  "observability": {
+    "enabled": true
+  }
+}
