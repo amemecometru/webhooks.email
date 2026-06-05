@@ -75,6 +75,72 @@ const api = {
     return this._fetch(`/api/endpoints/${id}/destinations/${destId}`, { method: 'DELETE' });
   },
 
+  // Email Destinations
+  addEmailDestination(id, email, subjectTemplate) {
+    return this._fetch(`/api/endpoints/${id}/email-destinations`, {
+      method: 'POST',
+      body: JSON.stringify({ email, subject_template: subjectTemplate })
+    });
+  },
+
+  removeEmailDestination(id, destId) {
+    return this._fetch(`/api/endpoints/${id}/email-destinations/${destId}`, { method: 'DELETE' });
+  },
+
+  // Transforms (AI)
+  getTransform(id) {
+    return this._fetch(`/api/endpoints/${id}/transforms`);
+  },
+
+  setTransform(id, prompt, model, outputSchema) {
+    return this._fetch(`/api/endpoints/${id}/transforms`, {
+      method: 'PUT',
+      body: JSON.stringify({ prompt, model, output_schema: outputSchema })
+    });
+  },
+
+  deleteTransform(id) {
+    return this._fetch(`/api/endpoints/${id}/transforms`, { method: 'DELETE' });
+  },
+
+  // Dead Letters
+  listDeadLetters(limit) {
+    const p = limit ? `?limit=${limit}` : '';
+    return this._fetch(`/api/dead-letters${p}`);
+  },
+
+  replayDeadLetter(id) {
+    return this._fetch(`/api/dead-letters/${id}/replay`, { method: 'POST' });
+  },
+
+  // Scheduled Webhooks
+  createScheduledWebhook(cron, url, method, headers, body) {
+    return this._fetch('/api/scheduled-webhooks', {
+      method: 'POST',
+      body: JSON.stringify({ cron, url, method, headers, body })
+    });
+  },
+
+  listScheduledWebhooks() {
+    return this._fetch('/api/scheduled-webhooks');
+  },
+
+  deleteScheduledWebhook(id) {
+    return this._fetch(`/api/scheduled-webhooks/${id}`, { method: 'DELETE' });
+  },
+
+  // Stripe
+  createCheckoutSession(priceId, plan, successUrl, cancelUrl) {
+    return this._fetch('/api/stripe/checkout', {
+      method: 'POST',
+      body: JSON.stringify({ price_id: priceId, plan, success_url: successUrl, cancel_url: cancelUrl })
+    });
+  },
+
+  createPortalSession() {
+    return this._fetch('/api/stripe/portal', { method: 'POST' });
+  },
+
   // Usage / Billing
   getUsage() {
     return this._fetch('/api/usage');

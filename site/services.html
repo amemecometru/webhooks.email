@@ -12,8 +12,7 @@
 </head>
 <body>
 <div class="grain"></div>
-<div id="cursor-dot"></div>
-<div id="cursor-ring"></div>
+<div class="page-glow"></div>
 
 <nav>
 <div class="nav-inner">
@@ -21,6 +20,7 @@
 <div class="nav-links">
 <a href="/">HOME</a>
 <a href="services.html">SERVICES</a>
+<a href="docs.html">DOCS</a>
 <a href="pricing.html">PRICING</a>
 <a href="https://app.webhooks.email" class="nav-cta">DASHBOARD</a>
 </div>
@@ -157,6 +157,7 @@
 <h5>PRODUCT</h5>
 <a href="/">HOME</a>
 <a href="services.html">SERVICES</a>
+<a href="docs.html">DOCS</a>
 <a href="pricing.html">PRICING</a>
 <a href="https://status.webhooks.email">STATUS</a>
 </div>
@@ -167,8 +168,8 @@
 <div class="footer-col">
 <h5>DEVELOPERS</h5>
 <a href="https://github.com/amemecometru/webhooks.email">GITHUB</a>
-<a href="services.html">API REFERENCE</a>
-<a href="services.html">SDKS</a>
+<a href="docs.html">API REFERENCE</a>
+<a href="docs.html">QUICKSTART</a>
 </div>
 </div>
 </div>
@@ -178,8 +179,8 @@
 </footer>
 
 <script>
-const dot=document.getElementById('cursor-dot'),ring=document.getElementById('cursor-ring');
-document.addEventListener('mousemove',e=>{dot.style.left=(e.clientX-1.5)+'px';dot.style.top=(e.clientY-1.5)+'px';ring.style.left=(e.clientX-14)+'px';ring.style.top=(e.clientY-14)+'px'});
+const g=document.querySelector('.page-glow');
+document.addEventListener('mousemove',e=>{const x=(e.clientX/window.innerWidth)*100,y=(e.clientY/window.innerHeight)*100;if(g)g.style.background=`radial-gradient(circle at ${x}% ${y}%, var(--copper-glow) 0%, transparent 15%), radial-gradient(circle at 20% 30%, rgba(27,77,74,0.15), transparent 40%), radial-gradient(circle at 80% 70%, rgba(45,27,20,0.2), transparent 40%)`});
 function createShard(cls){const s=document.createElement('div');s.className=cls;const sz=Math.random()*30+8;s.style.width=sz+'px';s.style.height=sz+'px';s.style.left=Math.random()*100+'vw';s.style.top=Math.random()*100+'vh';document.body.appendChild(s);let p={x:parseFloat(s.style.left),y:parseFloat(s.style.top)},v={x:(Math.random()-0.5)*0.15,y:(Math.random()-0.5)*0.15};function a(){p.x+=v.x;p.y+=v.y;if(p.x>105)p.x=-5;if(p.x<-5)p.x=105;if(p.y>105)p.y=-5;if(p.y<-5)p.y=105;s.style.left=p.x+'vw';s.style.top=p.y+'vh';requestAnimationFrame(a)}a()}
 for(let i=0;i<12;i++)createShard('shard');
 for(let i=0;i<6;i++)createShard('shard-copper');

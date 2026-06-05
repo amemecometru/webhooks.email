@@ -1,0 +1,387 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width,initial-scale=1.0"/>
+<title>WEBHOOKS.EMAIL — DOCS</title>
+<meta name="description" content="Documentation for webhooks.email: Inbound Webhooks, Email Bridge, and AI Transform. Overviews and quickstarts with working examples."/>
+<link rel="icon" type="image/svg+xml" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>⚡</text></svg>"/>
+<link rel="preconnect" href="https://fonts.googleapis.com"/>
+<link href="https://fonts.googleapis.com/css2?family=Roboto+Serif:ital,wght@0,100;0,400;1,100&family=Inter:wght@400;500;600;700;800&family=JetBrains+Mono:wght@400;500&family=Syne:wght@700;800&display=swap" rel="stylesheet"/>
+<link rel="stylesheet" href="style.css"/>
+</head>
+<body>
+<div class="grain"></div>
+<div class="page-glow"></div>
+
+<nav>
+<div class="nav-inner">
+<a href="/" class="logo">WEBHOOKS<span>.EMAIL</span></a>
+<div class="nav-links">
+<a href="/">HOME</a>
+<a href="services.html">SERVICES</a>
+<a href="docs.html" style="color:var(--gold)">DOCS</a>
+<a href="pricing.html">PRICING</a>
+<a href="https://app.webhooks.email" class="nav-cta">DASHBOARD</a>
+</div>
+</div>
+</nav>
+
+<section class="section" style="padding-top:160px">
+<div class="section-header">
+<div class="section-label">// DOCUMENTATION</div>
+<h1 class="section-title" style="font-size:clamp(2.5rem,5vw,4.5rem);font-family:var(--font-serif);font-weight:100;font-style:italic;line-height:1.05;letter-spacing:-0.02em">OVERVIEW &amp;<br/><span class="foil-drift">QUICKSTART.</span></h1>
+<p class="section-sub">Three core features. One endpoint. Every example is a working <code style="color:var(--gold)">curl</code> command against the live API.</p>
+</div>
+</section>
+
+<!-- ── FEATURE 1: INBOUND WEBHOOKS ── -->
+<section class="section docs" id="inbound">
+<div class="docs-header">
+<div class="section-label">// 01 // INBOUND WEBHOOKS</div>
+<h2 class="docs-title">RECEIVE WEBHOOKS<br/>AT YOUR ENDPOINT.</h2>
+</div>
+
+<div class="docs-grid">
+<div class="docs-article">
+<h3 class="docs-h3">Overview</h3>
+<p class="docs-p">Every endpoint gets a unique URL at <code class="inline-code">https://you.webhooks.email/hook/{id}</code>. Any HTTP method — GET, POST, PUT, PATCH, DELETE — is accepted, logged, and forwarded to your configured destinations.</p>
+<p class="docs-p">Headers, body, method, and timestamp are captured for every request. The full audit log is searchable through the dashboard and API. Failed deliveries go to the dead letter queue with automatic retry.</p>
+
+<div class="diagram">
+<div class="diagram-row">
+<div class="diagram-node diag-src">curl / sender</div>
+<div class="diagram-arrow">→</div>
+<div class="diagram-node diag-ingress">
+<span class="diag-mono">you.webhooks.email</span>
+<span class="diag-mono diag-dim">/hook/{id}</span>
+</div>
+<div class="diagram-arrow">→</div>
+<div class="diagram-node diag-forward">forward</div>
+<div class="diagram-arrow">→</div>
+<div class="diagram-node diag-dest">your server</div>
+</div>
+<div class="diagram-row diag-sub">
+<span>POST / PUT / PATCH / DELETE</span>
+<span>capture + log</span>
+<span>transform + retry</span>
+<span>200 OK</span>
+</div>
+</div>
+
+<h3 class="docs-h3">Quickstart</h3>
+<p class="docs-p">Create an endpoint, then send a webhook. Replace <code class="inline-code">YOUR_API_KEY</code> with your key from the dashboard.</p>
+
+<div class="code-block">
+<div class="code-header">
+<span class="code-dot"></span><span class="code-dot"></span><span class="code-dot"></span>
+<span class="code-lang">SHELL</span>
+</div>
+<pre><span class="cmt"># Create an endpoint</span>
+curl -X POST https://app.webhooks.email/api/endpoints \
+  -H <span class="hl">"Authorization: Bearer YOUR_API_KEY"</span> \
+  -H <span class="hl">"Content-Type: application/json"</span> \
+  -d '{"name": "my-endpoint", "destinations": [{"url": "https://myserver.com/webhook"}]}'
+
+<span class="cmt"># Response — save the webhook_url and api_key</span>
+{
+  <span class="hl">"id"</span>: "<span class="neon">abc-123</span>",
+  <span class="hl">"webhook_url"</span>: "<span class="neon">https://you.webhooks.email/hook/abc-123</span>",
+  <span class="hl">"api_key"</span>: "<span class="neon">sk_...</span>",
+  <span class="hl">"plan"</span>: "free"
+}
+
+<span class="cmt"># Send a webhook</span>
+curl -X POST https://you.webhooks.email/hook/abc-123 \
+  -H <span class="hl">"Content-Type: application/json"</span> \
+  -d '{"event": "invoice.paid", "amount": 4999, "currency": "usd"}'
+
+<span class="cmt"># Response</span>
+{
+  <span class="hl">"status"</span>: "received",
+  <span class="hl">"delivery"</span>: "forwarded",
+  <span class="hl">"destinations"</span>: ["https://myserver.com/webhook"]
+}</pre>
+</div>
+</div>
+
+<div class="docs-meta">
+<div class="meta-box">
+<h4>ENDPOINT</h4>
+<code>POST /hook/{id}</code>
+<p>Accepts any HTTP method. Content-Type is auto-detected.</p>
+</div>
+<div class="meta-box">
+<h4>AUTH</h4>
+<p>No auth required to send webhooks. API key only needed for dashboard/management.</p>
+</div>
+<div class="meta-box">
+<h4>LIMITS</h4>
+<p>Free: 1,000/mo. Pro: 100,000/mo. Enterprise: 5M/mo.</p>
+</div>
+<div class="meta-box">
+<h4>RETENTION</h4>
+<p>Free: 7 days. Pro: 30 days. Enterprise: 90 days.</p>
+</div>
+</div>
+</div>
+</section>
+
+<div class="section-divider"></div>
+
+<!-- ── FEATURE 2: EMAIL BRIDGE ── -->
+<section class="section docs" id="email-bridge">
+<div class="docs-header">
+<div class="section-label">// 02 // EMAIL BRIDGE</div>
+<h2 class="docs-title">SEND EMAIL →<br/>RECEIVE WEBHOOK.</h2>
+</div>
+
+<div class="docs-grid">
+<div class="docs-article">
+<h3 class="docs-h3">Overview</h3>
+<p class="docs-p">Every endpoint gets <code class="inline-code">anything@you.webhooks.email</code>. Send an email to that address and we convert it to a structured webhook POST to your destinations. Full MIME parsing: text body, HTML body, attachments (base64), headers, and SPF/DKIM status.</p>
+<p class="docs-p">Use it for form submissions, customer support integrations, or any system that can send email but not HTTP webhooks.</p>
+
+<div class="diagram">
+<div class="diagram-row">
+<div class="diagram-node diag-src">gmail / outlook</div>
+<div class="diagram-arrow">→</div>
+<div class="diagram-node diag-ingress">
+<span class="diag-mono">anything@</span>
+<span class="diag-mono diag-gold">you</span>
+<span class="diag-mono">.webhooks.email</span>
+</div>
+<div class="diagram-arrow">→</div>
+<div class="diagram-node diag-forward">webhook<br/>POST</div>
+<div class="diagram-arrow">→</div>
+<div class="diagram-node diag-dest">your server</div>
+</div>
+<div class="diagram-row diag-sub">
+<span>SMTP inbound</span>
+<span>MIME parse</span>
+<span>JSON payload</span>
+<span>delivered</span>
+</div>
+</div>
+
+<h3 class="docs-h3">Quickstart</h3>
+<p class="docs-p">Send any email to your endpoint's email address. The payload your server receives looks like this:</p>
+
+<div class="code-block">
+<div class="code-header">
+<span class="code-dot"></span><span class="code-dot"></span><span class="code-dot"></span>
+<span class="code-lang">JSON (WEBHOOK PAYLOAD)</span>
+</div>
+<pre>{
+  <span class="hl">"source"</span>: "email",
+  <span class="hl">"event"</span>: "email.received",
+  <span class="hl">"email"</span>: {
+    <span class="hl">"from"</span>: {
+      <span class="hl">"name"</span>: "Alice",
+      <span class="hl">"address"</span>: "alice@gmail.com"
+    },
+    <span class="hl">"to"</span>: ["support@you.webhooks.email"],
+    <span class="hl">"subject"</span>: "New support ticket",
+    <span class="hl">"text_body"</span>: "My account is not loading...",
+    <span class="hl">"html_body"</span>: "&lt;p&gt;My account is not loading...&lt;/p&gt;",
+    <span class="hl">"attachments"</span>: [
+      {
+        <span class="hl">"filename"</span>: "screenshot.png",
+        <span class="hl">"content_type"</span>: "image/png",
+        <span class="hl">"size"</span>: 24576,
+        <span class="hl">"base64"</span>: "iVBORw0KGgo..."
+      }
+    ],
+    <span class="hl">"headers"</span>: {
+      <span class="hl">"received-spf"</span>: "pass",
+      <span class="hl">"dkim"</span>: "signature=..."
+    },
+    <span class="hl">"spf_status"</span>: "pass",
+    <span class="hl">"dkim_status"</span>: "pass"
+  },
+  <span class="hl">"endpoint_id"</span>: "abc-123",
+  <span class="hl">"received_at"</span>: "2026-06-05T12:00:00Z"
+}</pre>
+</div>
+</div>
+
+<div class="docs-meta">
+<div class="meta-box">
+<h4>EMAIL ADDRESS</h4>
+<code>*@you.webhooks.email</code>
+<p>Any local part is accepted. One address per endpoint.</p>
+</div>
+<div class="meta-box">
+<h4>MIME PARSING</h4>
+<p>Text body, HTML body, attachments, headers, SPF/DKIM status. Attachments base64-encoded.</p>
+</div>
+<div class="meta-box">
+<h4>LIMITS</h4>
+<p>Free: 5 emails/day. Pro: 500/day. Enterprise: unlimited.</p>
+</div>
+<div class="meta-box">
+<h4>DELIVERY</h4>
+<p>Each email is POSTed as a webhook to all configured destinations. Includes dead letter retry.</p>
+</div>
+</div>
+</div>
+</section>
+
+<div class="section-divider"></div>
+
+<!-- ── FEATURE 3: AI TRANSFORM ── -->
+<section class="section docs" id="ai-transform">
+<div class="docs-header">
+<div class="section-label">// 03 // AI TRANSFORM</div>
+<h2 class="docs-title">REWRITE PAYLOADS<br/>WITH AI.</h2>
+</div>
+
+<div class="docs-grid">
+<div class="docs-article">
+<h3 class="docs-h3">Overview</h3>
+<p class="docs-p">Attach a transform prompt to any endpoint. Every incoming webhook is sent through an LLM (OpenRouter) before being forwarded. The prompt tells the model how to reshape the payload — filter fields, rename keys, enrich with derived data, or convert between formats.</p>
+<p class="docs-p">Use it when senders emit bloated payloads and you only need 3 fields. Or when you need to normalize webhooks from different sources into a consistent schema.</p>
+
+<div class="diagram">
+<div class="diagram-row">
+<div class="diagram-node diag-src">webhook<br/>sender</div>
+<div class="diagram-arrow">→</div>
+<div class="diagram-node diag-ingress" style="border-color:var(--gold-dim)">
+<span class="diag-mono diag-gold">/hook/{id}</span>
+<span class="diag-mono" style="font-size:9px;color:var(--text3)">with transform enabled</span>
+</div>
+<div class="diagram-arrow">→</div>
+<div class="diagram-node diag-ai" style="background:rgba(201,168,76,0.06);border-color:var(--gold-dim)">
+<span class="diag-mono diag-gold">OpenRouter</span>
+<span class="diag-mono" style="font-size:9px;color:var(--text3)">LLM rewrite</span>
+</div>
+<div class="diagram-arrow">→</div>
+<div class="diagram-node diag-dest">your server<br/><span style="font-size:9px;color:var(--text3)">transformed payload</span></div>
+</div>
+<div class="diagram-row diag-sub">
+<span>raw payload</span>
+<span>prompt applied</span>
+<span style="color:var(--gold)">AI rewrite</span>
+<span>clean output</span>
+</div>
+</div>
+
+<h3 class="docs-h3">Quickstart</h3>
+<p class="docs-p">Set a transform prompt on your endpoint, then send a webhook. The response includes <code class="inline-code">x-webhook-transformed: true</code>.</p>
+
+<div class="code-block">
+<div class="code-header">
+<span class="code-dot"></span><span class="code-dot"></span><span class="code-dot"></span>
+<span class="code-lang">SHELL</span>
+</div>
+<pre><span class="cmt"># Set a transform prompt (Pro plan required)</span>
+curl -X PUT https://app.webhooks.email/api/endpoints/abc-123/transforms \
+  -H <span class="hl">"Authorization: Bearer YOUR_API_KEY"</span> \
+  -H <span class="hl">"Content-Type: application/json"</span> \
+  -d '{
+    <span class="hl">"prompt"</span>: "Extract only the id, status, and total fields. Rename total to amount. Convert status to lowercase.",
+    <span class="hl">"model"</span>: "openai/gpt-4o-mini"
+  }'
+
+<span class="cmt"># Response</span>
+{ <span class="hl">"status"</span>: "created" }
+
+<span class="cmt"># Send a webhook — it will be transformed before forwarding</span>
+curl -X POST https://you.webhooks.email/hook/abc-123 \
+  -H <span class="hl">"Content-Type: application/json"</span> \
+  -d '{
+    "id": "in_123",
+    "object": "invoice",
+    "status": "PAID",
+    "total": 4999,
+    "currency": "usd",
+    "customer_name": "Alice",
+    "customer_email": "alice@example.com",
+    "line_items": [...]
+  }'
+
+<span class="cmt"># What your destination receives:</span>
+{
+  <span class="hl">"id"</span>: "in_123",
+  <span class="hl">"status"</span>: "paid",
+  <span class="hl">"amount"</span>: 4999
+}
+<span class="cmt"># header: x-webhook-transformed: true</span>
+<span class="cmt"># header: x-webhook-model: openai/gpt-4o-mini</span></pre>
+</div>
+</div>
+
+<div class="docs-meta">
+<div class="meta-box">
+<h4>ENDPOINT</h4>
+<code>PUT /api/endpoints/{id}/transforms</code>
+<p>Set prompt, model, and optional output_schema.</p>
+</div>
+<div class="meta-box">
+<h4>MODELS</h4>
+<p>Default: <code>openai/gpt-4o-mini</code>. Any OpenRouter model supported. Set via <code>model</code> field.</p>
+</div>
+<div class="meta-box">
+<h4>PRICING</h4>
+<p>Prompts billed at OpenRouter rates (~$0.15/1M input tokens). Counts toward your webhook volume.</p>
+</div>
+<div class="meta-box">
+<h4>ERROR HANDLING</h4>
+<p>If the LLM call fails, the original payload is forwarded and <code>x-webhook-transform-error</code> header is set.</p>
+</div>
+</div>
+</div>
+</section>
+
+<div class="gold-divider"></div>
+
+<!-- ── NEXT STEPS ── -->
+<section class="section cta-section">
+<div class="cta-inner">
+<h2>READY TO BUILD?</h2>
+<p>Create an endpoint in 10 seconds. No credit card required.</p>
+<a href="https://app.webhooks.email" class="btn-primary" style="padding:16px 48px">CREATE ENDPOINT</a>
+</div>
+</section>
+
+<footer>
+<div class="footer-inner">
+<div class="footer-brand">
+<a href="/" class="logo">WEBHOOKS<span>.EMAIL</span></a>
+<p>Webhook ingestion for modern developers. One endpoint. Every protocol.</p>
+</div>
+<div class="footer-links">
+<div class="footer-col">
+<h5>PRODUCT</h5>
+<a href="/">HOME</a>
+<a href="services.html">SERVICES</a>
+<a href="docs.html">DOCS</a>
+<a href="pricing.html">PRICING</a>
+<a href="https://status.webhooks.email">STATUS</a>
+</div>
+<div class="footer-col">
+<h5>COMPANY</h5>
+<a href="mailto:support@webhooks.email">CONTACT</a>
+</div>
+<div class="footer-col">
+<h5>DEVELOPERS</h5>
+<a href="https://github.com/amemecometru/webhooks.email">GITHUB</a>
+<a href="docs.html">API REFERENCE</a>
+<a href="docs.html">QUICKSTART</a>
+</div>
+</div>
+</div>
+<div class="footer-bottom">
+<p>&copy; 2026 WEBHOOKS.EMAIL — ALL RIGHTS RESERVED.</p>
+</div>
+</footer>
+
+<script>
+const g=document.querySelector('.page-glow');
+document.addEventListener('mousemove',e=>{const x=(e.clientX/window.innerWidth)*100,y=(e.clientY/window.innerHeight)*100;if(g)g.style.background=`radial-gradient(circle at ${x}% ${y}%, var(--copper-glow) 0%, transparent 15%), radial-gradient(circle at 20% 30%, rgba(27,77,74,0.15), transparent 40%), radial-gradient(circle at 80% 70%, rgba(45,27,20,0.2), transparent 40%)`});
+function createShard(cls){const s=document.createElement('div');s.className=cls;const sz=Math.random()*30+8;s.style.width=sz+'px';s.style.height=sz+'px';s.style.left=Math.random()*100+'vw';s.style.top=Math.random()*100+'vh';document.body.appendChild(s);let p={x:parseFloat(s.style.left),y:parseFloat(s.style.top)},v={x:(Math.random()-0.5)*0.15,y:(Math.random()-0.5)*0.15};function a(){p.x+=v.x;p.y+=v.y;if(p.x>105)p.x=-5;if(p.x<-5)p.x=105;if(p.y>105)p.y=-5;if(p.y<-5)p.y=105;s.style.left=p.x+'vw';s.style.top=p.y+'vh';requestAnimationFrame(a)}a()}
+for(let i=0;i<12;i++)createShard('shard');
+for(let i=0;i<6;i++)createShard('shard-copper');
+</script>
+</body>
+</html>

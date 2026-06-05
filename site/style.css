@@ -41,9 +41,10 @@ body{background:var(--bg);color:var(--text);font-family:var(--font-sans);line-he
 /* ---- GRAIN TEXTURE ---- */
 .grain{position:fixed;top:0;left:0;width:100%;height:100%;pointer-events:none;z-index:999;opacity:0.04;mix-blend-mode:overlay;background:url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noiseFilter'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.65' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noiseFilter)'/%3E%3C/svg%3E")}
 
-/* ---- CUSTOM CURSOR ---- */
-#cursor-dot{position:fixed;width:3px;height:3px;background:var(--patina);border-radius:50%;pointer-events:none;z-index:1000;transition:opacity 0.15s}
-#cursor-ring{position:fixed;width:28px;height:28px;border:1px solid var(--gold);border-radius:50%;pointer-events:none;z-index:999;transition:width 0.2s cubic-bezier(0.16,1,0.3,1),height 0.2s cubic-bezier(0.16,1,0.3,1),opacity 0.2s;box-shadow:0 0 10px rgba(201,168,76,0.15),inset 0 0 10px rgba(201,168,76,0.05)}
+/* ---- PAGE SCOPE GLOW ---- */
+.page-glow{position:fixed;inset:0;pointer-events:none;z-index:0;
+background:radial-gradient(circle at 20% 30%,rgba(27,77,74,0.15),transparent 40%),
+radial-gradient(circle at 80% 70%,rgba(45,27,20,0.2),transparent 40%)}
 
 /* ---- FOIL DRIFT ANIMATION ---- */
 @keyframes foilFlow{0%{background-position:0% 50%}50%{background-position:100% 50%}100%{background-position:0% 50%}}
@@ -172,8 +173,14 @@ radial-gradient(ellipse 70% 50% at 50% 0%,rgba(201,168,76,0.04),transparent)}
 
 /* ---- DOCS / API ---- */
 .docs{background:var(--bg);border-bottom:1px solid var(--border)}
+.docs-header{margin-bottom:60px}
+.docs-title{font-family:var(--font-serif);font-weight:100;font-style:italic;font-size:clamp(1.6rem,3vw,2.5rem);line-height:1.05;letter-spacing:-0.02em;margin-top:12px}
 .docs-grid{max-width:1200px;margin:0 auto;display:grid;grid-template-columns:1.2fr 1fr;gap:60px;align-items:start}
-.code-block{background:var(--bg2);border:1px solid var(--border);overflow:hidden}
+.docs-article{min-width:0}
+.docs-h3{font-family:var(--font-sans);font-size:0.7rem;font-weight:600;letter-spacing:0.08em;text-transform:uppercase;margin-bottom:12px;color:var(--gold)}
+.docs-p{font-size:0.82rem;color:var(--text2);line-height:1.8;margin-bottom:24px}
+.inline-code{font-family:var(--font-mono);font-size:0.75rem;color:var(--neon);background:rgba(0,240,255,0.06);padding:1px 6px;border-radius:2px}
+.code-block{background:var(--bg2);border:1px solid var(--border);overflow:hidden;margin-bottom:16px}
 .code-header{display:flex;align-items:center;gap:8px;padding:10px 16px;background:var(--surface);border-bottom:1px solid var(--border)}
 .code-dot{width:8px;height:8px;border-radius:50%}
 .code-dot:nth-child(1){background:#ef4444}
@@ -189,6 +196,20 @@ radial-gradient(ellipse 70% 50% at 50% 0%,rgba(201,168,76,0.04),transparent)}
 .meta-box h4{font-family:var(--font-mono);font-size:0.55rem;letter-spacing:0.15em;color:var(--text3);margin-bottom:8px;text-transform:uppercase}
 .meta-box code{font-family:var(--font-mono);font-size:0.78rem;color:var(--gold)}
 .meta-box p{font-size:0.78rem;color:var(--text2)}
+
+/* ---- DIAGRAM ---- */
+.diagram{border:1px solid var(--border);background:var(--surface);padding:24px;margin-bottom:32px;overflow-x:auto}
+.diagram-row{display:flex;align-items:center;gap:8px;justify-content:center;padding:4px 0}
+.diagram-row.diag-sub{margin-top:8px;gap:0;justify-content:space-around;font-family:var(--font-mono);font-size:9px;color:var(--text3);text-transform:uppercase;letter-spacing:0.08em}
+.diagram-node{padding:10px 16px;border:1px solid var(--trace-dim);font-family:var(--font-mono);font-size:11px;color:var(--text2);text-align:center;line-height:1.4;background:var(--bg2);white-space:nowrap}
+.diagram-node.diag-src{border-color:var(--neon-dim);color:var(--neon)}
+.diagram-node.diag-ingress{border-color:var(--copper);color:var(--copper)}
+.diagram-node.diag-forward{border-color:var(--patina);color:var(--patina)}
+.diagram-node.diag-dest{border-color:var(--gold-dim);color:var(--gold)}
+.diagram-arrow{color:var(--text3);font-size:14px;padding:0 4px;opacity:0.6}
+.diag-mono{display:block;font-family:var(--font-mono)}
+.diag-mono.diag-gold{color:var(--gold)}
+.diag-mono.diag-dim{color:var(--text3);font-size:9px}
 
 /* ---- CTA ---- */
 .cta-section{padding:140px 40px;text-align:center;position:relative;overflow:hidden}
@@ -231,7 +252,7 @@ footer{border-top:1px solid var(--border);padding:80px 40px 32px}
 .hero h1{font-size:clamp(2.5rem,10vw,4rem)}
 .section{padding:80px 24px}
 .service-card,.plan-card{padding:32px 28px}
-#cursor-dot,#cursor-ring{display:none}
+.page-glow{display:none}
 }
 
 /* ---- SUBDOMAIN VISUALIZATION ---- */
