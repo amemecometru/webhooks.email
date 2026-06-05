@@ -1,0 +1,40 @@
+{
+  "name": "@webhooks.email/skills",
+  "version": "0.1.0",
+  "description": "Agent skills and CLI for Webhooks.Email — webhook ingestion, email bridge, AI transform, dead letter queue, and scheduled delivery. Outshines Hookdeck with a complete platform you can actually use from the terminal.",
+  "type": "module",
+  "main": "bin/we.js",
+  "bin": {
+    "we": "./bin/we.js"
+  },
+  "files": [
+    "skills/",
+    "bin/",
+    "README.md"
+  ],
+  "scripts": {
+    "test": "node bin/we.js --help",
+    "prepublishOnly": "node bin/we.js --version"
+  },
+  "keywords": [
+    "webhooks",
+    "email",
+    "webhook-skills",
+    "agent-skills",
+    "webhook-ingestion",
+    "email-bridge",
+    "ai-transform",
+    "webhook-cli",
+    "hookdeck-alternative"
+  ],
+  "author": "Webhooks.Email",
+  "license": "MIT",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/amemecometru/webhooks.email.git"
+  },
+  "bugs": {
+    "url": "https://github.com/amemecometru/webhooks.email/issues"
+  },
+  "homepage": "https://webhooks.email/docs.html"
+}
