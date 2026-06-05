@@ -1,0 +1,12 @@
+# Dashboard subdomain
+https://app.webhooks.email/*  /app/:splat  200
+
+# Root serves the marketing site
+/  /site/index.html  200
+/services  /site/services.html  200
+/pricing  /site/pricing.html  200
+/style.css  /site/style.css  200
+/main.js  /site/main.js  200
+
+# Favicon fallback
+/favicon.ico  /site/favicon.ico  200

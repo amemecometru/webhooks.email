@@ -30,7 +30,8 @@
 </head>
 <body>
 <div class="grain"></div>
-<div id="cursor"></div>
+<div id="cursor-dot"></div>
+<div id="cursor-ring"></div>
 
 <nav>
 <div class="nav-inner">
@@ -204,8 +205,8 @@
 </footer>
 
 <script>
-const cursor=document.getElementById('cursor');
-document.addEventListener('mousemove',e=>{cursor.style.left=e.clientX+'px';cursor.style.top=e.clientY+'px'});
+const dot=document.getElementById('cursor-dot'),ring=document.getElementById('cursor-ring');
+document.addEventListener('mousemove',e=>{dot.style.left=(e.clientX-1.5)+'px';dot.style.top=(e.clientY-1.5)+'px';ring.style.left=(e.clientX-14)+'px';ring.style.top=(e.clientY-14)+'px'});
 function createShard(cls){const s=document.createElement('div');s.className=cls;const sz=Math.random()*30+8;s.style.width=sz+'px';s.style.height=sz+'px';s.style.left=Math.random()*100+'vw';s.style.top=Math.random()*100+'vh';document.body.appendChild(s);let p={x:parseFloat(s.style.left),y:parseFloat(s.style.top)},v={x:(Math.random()-0.5)*0.15,y:(Math.random()-0.5)*0.15};function a(){p.x+=v.x;p.y+=v.y;if(p.x>105)p.x=-5;if(p.x<-5)p.x=105;if(p.y>105)p.y=-5;if(p.y<-5)p.y=105;s.style.left=p.x+'vw';s.style.top=p.y+'vh';requestAnimationFrame(a)}a()}
 for(let i=0;i<12;i++)createShard('shard');
 for(let i=0;i<6;i++)createShard('shard-copper');
