@@ -1,0 +1,183 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width,initial-scale=1.0"/>
+<title>WEBHOOKS.EMAIL — SERVICES & PRODUCTS</title>
+<meta name="description" content="Webhook ingestion services: HTTP endpoints, email-to-webhook bridging, webhook relay, transformation, dead letter queues, and scheduled delivery."/>
+<link rel="icon" type="image/svg+xml" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>⚡</text></svg>"/>
+<link rel="preconnect" href="https://fonts.googleapis.com"/>
+<link href="https://fonts.googleapis.com/css2?family=Roboto+Serif:ital,wght@0,100;0,400;1,100&family=Inter:wght@400;500;600;700;800&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet"/>
+<link rel="stylesheet" href="style.css"/>
+</head>
+<body>
+<nav>
+<div class="nav-inner">
+<a href="/" class="logo">WEBHOOKS<span>.EMAIL</span></a>
+<div class="nav-links">
+<a href="/">HOME</a>
+<a href="services.html">SERVICES</a>
+<a href="pricing.html">PRICING</a>
+<a href="https://app.webhooks.email" class="nav-cta">DASHBOARD</a>
+</div>
+</div>
+</nav>
+
+<section class="section" style="padding-top:160px">
+<div class="section-header">
+<div class="section-label">// PRODUCT CATALOG</div>
+<h1 class="section-title" style="font-size:clamp(2.5rem,5vw,4.5rem);font-family:var(--font-serif);font-weight:100;font-style:italic;line-height:1.05;letter-spacing:-0.02em">EVERY PROTOCOL.<br/>ONE PLATFORM.</h1>
+<p class="section-sub">Thirteen services. One <em style="color:var(--gold);font-style:italic">webhooks.email</em> endpoint. Pay only for what you use.</p>
+</div>
+
+<div class="subdomain-viz" style="margin-bottom:80px">
+<div class="sub-part"><span class="hl">PROTOCOL</span></div>
+<div class="sub-part" style="border-right:none">HTTP/S <span class="dim">·</span> SMTP <span class="dim">·</span> EMAIL <span class="dim">·</span> WEBHOOK <span class="dim">·</span> CRON</div>
+<div class="sub-part"><span class="hl">→</span></div>
+<div class="sub-part" style="border-left:none"><span class="neon">YOU</span><span class="dim">.</span><span class="neon">WEBHOOKS</span><span class="dim">.</span><span class="hl">EMAIL</span></div>
+<div class="sub-part"><span class="hl">→</span></div>
+<div class="sub-part" style="border-left:none"><span class="neon">ANY</span><span class="dim">.</span><span class="hl">DESTINATION</span></div>
+</div>
+
+<div class="services-grid" style="max-width:1200px;margin:0 auto">
+<div class="service-card">
+<div class="service-num">// 01</div>
+<div class="service-icon">📥</div>
+<h3>WEBHOOK INBOX</h3>
+<p>Every account gets a dedicated webhook URL at <em style="color:var(--gold);font-style:normal">you.webhooks.email/hook</em>. Accept any HTTP method — GET, POST, PUT, PATCH, DELETE. Full header and body capture. Real-time log with search and payload inspection.</p>
+<div class="service-tag">HTTP INGRESS</div>
+</div>
+<div class="service-card">
+<div class="service-num">// 02</div>
+<div class="service-icon">✉️</div>
+<h3>EMAIL TO WEBHOOK</h3>
+<p>Send email to <em style="color:var(--gold);font-style:normal">anything@you.webhooks.email</em> and we POST it to your configured destinations as a structured webhook. Full MIME parsing: text body, HTML body, attachments (base64-encoded), headers, and SPF/DKIM status. Each email becomes a webhook event your application can process.</p>
+<div class="service-tag">EMAIL BRIDGE</div>
+</div>
+<div class="service-card">
+<div class="service-num">// 03</div>
+<div class="service-icon">📬</div>
+<h3>WEBHOOK TO EMAIL</h3>
+<p>Receive webhooks and we forward them as formatted email messages to any address. Headers become subject lines, payload body renders as formatted text, and delivery status is included. Set up email alerts from any webhook source in seconds.</p>
+<div class="service-tag">REVERSE BRIDGE</div>
+</div>
+<div class="service-card">
+<div class="service-num">// 04</div>
+<div class="service-icon">🔄</div>
+<h3>WEBHOOK RELAY</h3>
+<p>Forward every incoming webhook to one or many destinations simultaneously. Automatic retry with exponential backoff (3 attempts by default, configurable). Delivery receipts. No data loss — we log the full request and response of every forwarding attempt.</p>
+<div class="service-tag">FORWARDING</div>
+</div>
+<div class="service-card">
+<div class="service-num">// 05</div>
+<div class="service-icon">⚡</div>
+<h3>WEBHOOK TRANSFORM</h3>
+<p>Modify payloads before forwarding using our transformation engine. Filter fields, rename keys, inject headers, conditionally route based on content. Use pre-built templates (Stripe, GitHub, Clerk, Resend) or write custom jq-style transforms.</p>
+<div class="service-tag">MIDDLEWARE</div>
+</div>
+<div class="service-card">
+<div class="service-num">// 06</div>
+<div class="service-icon">💀</div>
+<h3>DEAD LETTER QUEUE</h3>
+<p>When a destination is unreachable, the failed webhook is stored in the dead letter queue with full context: request, response, error, and timestamp. Replay individually or in bulk. Export to JSON. Configurable retry policies per destination.</p>
+<div class="service-tag">RELIABILITY</div>
+</div>
+<div class="service-card">
+<div class="service-num">// 07</div>
+<div class="service-icon">📋</div>
+<h3>WEBHOOK FILTER</h3>
+<p>Route webhooks based on content. Define rules like "only forward if event.type == invoice.paid" or "block if payload contains sensitive keywords". Filters apply before forwarding, reducing downstream noise and cost.</p>
+<div class="service-tag">ROUTING</div>
+</div>
+<div class="service-card">
+<div class="service-num">// 08</div>
+<div class="service-icon">⏰</div>
+<h3>WEBHOOK SCHEDULER</h3>
+<p>Schedule webhook delivery at specific times. Cron syntax. Use it for daily health checks, weekly report triggers, or integrating with time-based automation. Each scheduled delivery is logged and billed as a webhook.</p>
+<div class="service-tag">CRON</div>
+</div>
+<div class="service-card">
+<div class="service-num">// 09</div>
+<div class="service-icon">🪞</div>
+<h3>WEBHOOK MIRROR</h3>
+<p>Duplicate incoming webhooks to multiple environments simultaneously. Send one copy to production, one to staging, one to the dead letter queue. Each destination receives the same payload with identical headers.</p>
+<div class="service-tag">DUPLICATION</div>
+</div>
+<div class="service-card">
+<div class="service-num">// 10</div>
+<div class="service-icon">📤</div>
+<h3>BULK EXPORT</h3>
+<p>Export all captured webhooks as JSON, NDJSON, or CSV. Filter by date range, endpoint, delivery status, or content pattern. Useful for migration, audit, or analytics pipelines. API and dashboard access.</p>
+<div class="service-tag">DATA</div>
+</div>
+<div class="service-card">
+<div class="service-num">// 11</div>
+<div class="service-icon">🔐</div>
+<h3>SIGNATURE VERIFICATION</h3>
+<p>Verify incoming webhook signatures automatically. Built-in support for Stripe, GitHub, Clerk, Svix, and custom HMAC schemes. Invalid signatures are flagged and optionally blocked before forwarding.</p>
+<div class="service-tag">SECURITY</div>
+</div>
+<div class="service-card">
+<div class="service-num">// 12</div>
+<div class="service-icon">📊</div>
+<h3>WEBHOOK ANALYTICS</h3>
+<p>Dashboard with real-time metrics: throughput, delivery success rate, average latency, error breakdown by destination. Webhook volume charts. Export raw metrics via API for custom monitoring.</p>
+<div class="service-tag">OBSERVABILITY</div>
+</div>
+<div class="service-card">
+<div class="service-num">// 13</div>
+<div class="service-icon">🔌</div>
+<h3>EMAIL AUTHENTICATOR</h3>
+<p>Verify email ownership via webhook callback. Send a verification email from <em style="color:var(--gold);font-style:normal">verify@webhooks.email</em> — clicking the link or replying triggers a webhook to your endpoint with the verification payload.</p>
+<div class="service-tag">VERIFICATION</div>
+</div>
+</div>
+</section>
+
+<section class="section cta-section" style="border-top:1px solid var(--border)">
+<div class="cta-inner">
+<h2>THIRTEEN SERVICES.<br/>ONE PRICE.</h2>
+<p>Every plan includes all services. Pay only for volume, not features.</p>
+<a href="pricing.html" class="btn-primary" style="padding:16px 48px">VIEW PRICING</a>
+</div>
+</section>
+
+<footer>
+<div class="footer-inner">
+<div class="footer-brand">
+<a href="/" class="logo">WEBHOOKS<span>.EMAIL</span></a>
+<p>Webhook ingestion for modern developers. One endpoint. Every protocol.</p>
+</div>
+<div class="footer-links">
+<div class="footer-col">
+<h5>PRODUCT</h5>
+<a href="/">HOME</a>
+<a href="services.html">SERVICES</a>
+<a href="pricing.html">PRICING</a>
+<a href="https://status.webhooks.email">STATUS</a>
+</div>
+<div class="footer-col">
+<h5>COMPANY</h5>
+<a href="mailto:support@webhooks.email">CONTACT</a>
+</div>
+<div class="footer-col">
+<h5>DEVELOPERS</h5>
+<a href="https://github.com/amemecometru/webhooks.email">GITHUB</a>
+<a href="services.html">API REFERENCE</a>
+<a href="services.html">SDKS</a>
+</div>
+</div>
+</div>
+<div class="footer-bottom">
+<p>&copy; 2026 WEBHOOKS.EMAIL — ALL RIGHTS RESERVED.</p>
+</div>
+</footer>
+
+<script>
+document.addEventListener('DOMContentLoaded',()=>{
+const o=new IntersectionObserver(e=>{e.forEach(e=>{if(e.isIntersecting){e.target.style.opacity='1';e.target.style.transform='translateY(0)'}})},{threshold:0.1});
+document.querySelectorAll('.service-card').forEach(e=>{e.style.opacity='0';e.style.transform='translateY(20px)';e.style.transition='opacity 0.6s cubic-bezier(0.16,1,0.3,1),transform 0.6s cubic-bezier(0.16,1,0.3,1)';o.observe(e)})
+});
+</script>
+</body>
+</html>
