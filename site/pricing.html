@@ -7,7 +7,7 @@
 <meta name="description" content="Webhook pricing. Free plan available. Pro at $19/mo. Enterprise at $99/mo. Usage-based billing. All services included in every plan."/>
 <link rel="icon" type="image/svg+xml" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>⚡</text></svg>"/>
 <link rel="preconnect" href="https://fonts.googleapis.com"/>
-<link href="https://fonts.googleapis.com/css2?family=Roboto+Serif:ital,wght@0,100;0,400;1,100&family=Inter:wght@400;500;600;700;800&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Roboto+Serif:ital,wght@0,100;0,400;1,100&family=Inter:wght@400;500;600;700;800&family=JetBrains+Mono:wght@400;500&family=Syne:wght@700;800&display=swap" rel="stylesheet"/>
 <link rel="stylesheet" href="style.css"/>
 <style>
 .compare-table{max-width:1200px;margin:0 auto;width:100%;border-collapse:collapse;font-size:0.8rem}
@@ -29,6 +29,9 @@
 </style>
 </head>
 <body>
+<div class="grain"></div>
+<div id="cursor"></div>
+
 <nav>
 <div class="nav-inner">
 <a href="/" class="logo">WEBHOOKS<span>.EMAIL</span></a>
@@ -44,7 +47,7 @@
 <section class="section" style="padding-top:160px">
 <div class="section-header">
 <div class="section-label">// PRICING</div>
-<h1 class="section-title" style="font-size:clamp(2.5rem,5vw,4.5rem);font-family:var(--font-serif);font-weight:100;font-style:italic;line-height:1.05;letter-spacing:-0.02em">SIMPLE PLANS.<br/>NO SURPRISES.</h1>
+<h1 class="section-title" style="font-size:clamp(2.5rem,5vw,4.5rem);font-family:var(--font-serif);font-weight:100;font-style:italic;line-height:1.05;letter-spacing:-0.02em"><span class="foil-drift">SIMPLE PLANS.</span><br/>NO SURPRISES.</h1>
 <p class="section-sub">Every plan includes all 13 services. You pay for volume — not features. Free tier included.</p>
 </div>
 
@@ -93,7 +96,7 @@
 <li>5,000,000 WEBHOOKS/MO</li>
 <li>UNLIMITED DESTINATIONS</li>
 <li>90-DAY LOG RETENTION</li>
-<li>ALL TRANSFORM FEATURES</span></li>
+<li>ALL TRANSFORM FEATURES</li>
 <li>UNLIMITED EMAIL BRIDGE</li>
 <li>CUSTOM RETRY POLICIES</li>
 <li>BULK EXPORT (ALL FORMATS)</li>
@@ -201,6 +204,11 @@
 </footer>
 
 <script>
+const cursor=document.getElementById('cursor');
+document.addEventListener('mousemove',e=>{cursor.style.left=e.clientX+'px';cursor.style.top=e.clientY+'px'});
+function createShard(cls){const s=document.createElement('div');s.className=cls;const sz=Math.random()*30+8;s.style.width=sz+'px';s.style.height=sz+'px';s.style.left=Math.random()*100+'vw';s.style.top=Math.random()*100+'vh';document.body.appendChild(s);let p={x:parseFloat(s.style.left),y:parseFloat(s.style.top)},v={x:(Math.random()-0.5)*0.15,y:(Math.random()-0.5)*0.15};function a(){p.x+=v.x;p.y+=v.y;if(p.x>105)p.x=-5;if(p.x<-5)p.x=105;if(p.y>105)p.y=-5;if(p.y<-5)p.y=105;s.style.left=p.x+'vw';s.style.top=p.y+'vh';requestAnimationFrame(a)}a()}
+for(let i=0;i<12;i++)createShard('shard');
+for(let i=0;i<6;i++)createShard('shard-copper');
 document.addEventListener('DOMContentLoaded',()=>{
 const o=new IntersectionObserver(e=>{e.forEach(e=>{if(e.isIntersecting){e.target.style.opacity='1';e.target.style.transform='translateY(0)'}})},{threshold:0.1});
 document.querySelectorAll('.plan-card,.overage-item').forEach(e=>{e.style.opacity='0';e.style.transform='translateY(20px)';e.style.transition='opacity 0.6s cubic-bezier(0.16,1,0.3,1),transform 0.6s cubic-bezier(0.16,1,0.3,1)';o.observe(e)})

@@ -4,13 +4,16 @@
 <meta charset="UTF-8"/>
 <meta name="viewport" content="width=device-width,initial-scale=1.0"/>
 <title>WEBHOOKS.EMAIL — WEBHOOK INGESTION, DELIVERED.</title>
-<meta name="description" content="Receive, log, and forward webhooks at your own endpoint. Email-to-webhook, webhook-to-email, and everything in between."/>
+<meta name="description" content="Receive, log, and forward webhooks at your own endpoint. Email-to-webhook bridging. Sub-millisecond routing. Zero infrastructure."/>
 <link rel="icon" type="image/svg+xml" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>⚡</text></svg>"/>
 <link rel="preconnect" href="https://fonts.googleapis.com"/>
-<link href="https://fonts.googleapis.com/css2?family=Roboto+Serif:ital,wght@0,100;0,400;1,100&family=Inter:wght@400;500;600;700;800&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Roboto+Serif:ital,wght@0,100;0,400;1,100&family=Inter:wght@400;500;600;700;800&family=JetBrains+Mono:wght@400;500&family=Syne:wght@700;800&display=swap" rel="stylesheet"/>
 <link rel="stylesheet" href="style.css"/>
 </head>
 <body>
+<div class="grain"></div>
+<div id="cursor"></div>
+
 <nav>
 <div class="nav-inner">
 <a href="/" class="logo">WEBHOOKS<span>.EMAIL</span></a>
@@ -36,26 +39,41 @@
 <span class="hero-badge-dot"></span>
 NOW IN PUBLIC BETA
 </div>
-<h1>WEBHOOKS.<br/><em>DELIVERED.</em></h1>
+<h1><span class="foil-drift">WEBHOOKS</span>.<br/><em>DELIVERED.</em></h1>
 <p class="hero-sub">Receive, transform, and forward webhooks at your own endpoint. Email-to-webhook bridging. Sub-millisecond routing. Zero infrastructure.</p>
 
-<div class="hero-coords">
-<div class="coord-line-left"></div>
-<div class="coord-box">
-<div class="coord-label">ENDPOINT</div>
-<div class="coord-value">YOU.WEBHOOKS.EMAIL/HOOK</div>
+<div class="conductive-path">
+<div class="coord-node current">
+<span class="coord-label">ENDPOINT</span>
+<div class="coord-box">YOU.WEBHOOKS.EMAIL/HOOK</div>
 </div>
-<div class="coord-line"></div>
-<div class="coord-box">
-<div class="coord-label">PROTOCOL</div>
-<div class="coord-value">HTTP/S · EMAIL · SMTP</div>
+<div class="trace-connector">
+<div class="electric-pulse"></div>
+<svg class="trace-svg" viewBox="0 0 80 60">
+<path d="M 0 15 L 40 15 L 40 45 L 80 45"/>
+<path class="trace-active" d="M 0 15 L 40 15 L 40 45 L 80 45"/>
+</svg>
 </div>
-<div class="coord-line"></div>
-<div class="coord-box">
-<div class="coord-label">STATUS</div>
-<div class="coord-value">HIGH_FIDELITY</div>
+<div class="coord-node">
+<span class="coord-label">PROTOCOL</span>
+<div class="coord-box">HTTP/S · EMAIL · SMTP</div>
 </div>
-<div class="coord-line-left" style="flex-direction:row-reverse"></div>
+<div class="trace-connector">
+<div class="electric-pulse" style="animation-delay:1.5s"></div>
+<svg class="trace-svg" viewBox="0 0 80 60">
+<path d="M 0 45 L 40 45 L 40 15 L 80 15"/>
+<path class="trace-active-delayed" d="M 0 45 L 40 45 L 40 15 L 80 15"/>
+</svg>
+</div>
+<div class="coord-node">
+<span class="coord-label">STATUS</span>
+<div class="coord-box">HIGH_FIDELITY</div>
+</div>
+<div class="coord-data">
+VOLTAGE: 4.2V [STABLE]<br/>
+ROUTE: INGEST → TRANSFORM → FORWARD<br/>
+OXIDATION_RATE: 0.003%
+</div>
 </div>
 
 <div class="hero-actions">
@@ -261,6 +279,19 @@ NOW IN PUBLIC BETA
 </footer>
 
 <script>
+// Cursor
+const cursor=document.getElementById('cursor');
+document.addEventListener('mousemove',e=>{cursor.style.left=e.clientX+'px';cursor.style.top=e.clientY+'px'});
+
+// Floating gold shard particles
+function createShard(cls){const s=document.createElement('div');s.className=cls;const sz=Math.random()*30+8;s.style.width=sz+'px';s.style.height=sz+'px';s.style.left=Math.random()*100+'vw';s.style.top=Math.random()*100+'vh';document.body.appendChild(s);let p={x:parseFloat(s.style.left),y:parseFloat(s.style.top)},v={x:(Math.random()-0.5)*0.15,y:(Math.random()-0.5)*0.15};function a(){p.x+=v.x;p.y+=v.y;if(p.x>105)p.x=-5;if(p.x<-5)p.x=105;if(p.y>105)p.y=-5;if(p.y<-5)p.y=105;s.style.left=p.x+'vw';s.style.top=p.y+'vh';requestAnimationFrame(a)}a()}
+for(let i=0;i<12;i++)createShard('shard');
+for(let i=0;i<6;i++)createShard('shard-copper');
+
+// Mouse-follow glow on hero
+document.addEventListener('mousemove',e=>{const x=(e.clientX/window.innerWidth)*100,y=(e.clientY/window.innerHeight)*100;const bg=document.querySelector('.hero-bg');if(bg)bg.style.background=`radial-gradient(circle at ${x}% ${y}%, var(--copper-glow) 0%, transparent 12%), radial-gradient(circle at 20% 30%, rgba(27,77,74,0.15), transparent 40%), radial-gradient(circle at 80% 70%, rgba(45,27,20,0.2), transparent 40%), radial-gradient(ellipse 70% 50% at 50% 0%, rgba(201,168,76,0.04), transparent)`});
+
+// Intersection observer for cards
 document.addEventListener('DOMContentLoaded',()=>{
 const nav=document.querySelector('nav');
 window.addEventListener('scroll',()=>{nav.style.borderBottomColor=window.scrollY>20?'var(--border)':'transparent'});
