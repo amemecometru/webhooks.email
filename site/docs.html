@@ -335,6 +335,293 @@ curl -X POST https://you.webhooks.email/hook/abc-123 \
 
 <div class="gold-divider"></div>
 
+<!-- ── INTEGRATIONS ── -->
+<section class="section docs" id="integrations">
+<div class="docs-header">
+<div class="section-label">// 04 // INTEGRATIONS</div>
+<h2 class="docs-title">TRIGGER WEBHOOKS<br/>FROM ANYWHERE.</h2>
+</div>
+
+<div class="docs-grid">
+<div class="docs-article">
+<p class="docs-p">webhooks.email works with any service that can send HTTP requests or email. Here are 12 ways to trigger your endpoint — pick the one that fits your workflow.</p>
+
+<div class="integration-accordion">
+
+<div class="int-group">
+<div class="int-group-header" onclick="this.nextElementSibling.classList.toggle('open');this.classList.toggle('open')">
+<span class="int-num">01</span><span class="int-name">cURL</span><span class="int-arrow">▾</span>
+</div>
+<div class="int-group-body">
+<div class="code-block">
+<div class="code-header"><span class="code-dot"></span><span class="code-dot"></span><span class="code-dot"></span><span class="code-lang">SHELL</span></div>
+<pre>curl -X POST https://you.webhooks.email/hook/YOUR_ENDPOINT_ID \
+  -H <span class="hl">"Content-Type: application/json"</span> \
+  -d '{"event": "deploy", "status": "success"}'</pre>
+</div>
+</div>
+</div>
+
+<div class="int-group">
+<div class="int-group-header" onclick="this.nextElementSibling.classList.toggle('open');this.classList.toggle('open')">
+<span class="int-num">02</span><span class="int-name">Zapier (Webhooks by Zapier)</span><span class="int-arrow">▾</span>
+</div>
+<div class="int-group-body">
+<p class="docs-p">1. Add a <strong>"Webhooks by Zapier"</strong> action step.<br/>
+2. Select <strong>"POST"</strong> as the method.<br/>
+3. Set URL to <code class="inline-code">https://you.webhooks.email/hook/YOUR_ENDPOINT_ID</code>.<br/>
+4. Set <strong>"Payload Type"</strong> to <strong>"json"</strong>.<br/>
+5. Map your Zapier fields to the JSON body.<br/>
+6. Test and enable your Zap.</p>
+<div class="code-block">
+<div class="code-header"><span class="code-dot"></span><span class="code-dot"></span><span class="code-dot"></span><span class="code-lang">ZAPIER CONFIG</span></div>
+<pre><span class="cmt"># Action: Webhooks by Zapier → POST</span>
+URL: <span class="hl">https://you.webhooks.email/hook/YOUR_ENDPOINT_ID</span>
+Payload Type: <span class="hl">json</span>
+Data:
+  {
+    "event": "zapier.triggered",
+    "data": {
+      "field1": "{{field1}}",
+      "field2": "{{field2}}"
+    }
+  }</pre>
+</div>
+</div>
+</div>
+
+<div class="int-group">
+<div class="int-group-header" onclick="this.nextElementSibling.classList.toggle('open');this.classList.toggle('open')">
+<span class="int-num">03</span><span class="int-name">Make (formerly Integromat)</span><span class="int-arrow">▾</span>
+</div>
+<div class="int-group-body">
+<p class="docs-p">1. Add a <strong>"HTTP"</strong> module to your scenario.<br/>
+2. Set method to <strong>"POST"</strong>.<br/>
+3. URL: <code class="inline-code">https://you.webhooks.email/hook/YOUR_ENDPOINT_ID</code>.<br/>
+4. Set body type to <strong>"JSON"</strong> and map your data.<br/>
+5. Add headers: <code class="inline-code">Content-Type: application/json</code>.</p>
+</div>
+</div>
+
+<div class="int-group">
+<div class="int-group-header" onclick="this.nextElementSibling.classList.toggle('open');this.classList.toggle('open')">
+<span class="int-num">04</span><span class="int-name">GitHub Actions</span><span class="int-arrow">▾</span>
+</div>
+<div class="int-group-body">
+<div class="code-block">
+<div class="code-header"><span class="code-dot"></span><span class="code-dot"></span><span class="code-dot"></span><span class="code-lang">YAML</span></div>
+<pre><span class="hl">name</span>: Notify webhooks.email
+<span class="hl">on</span>:
+  push:
+    branches: [main]
+  pull_request:
+    types: [opened, closed]
+
+<span class="hl">jobs</span>:
+  notify:
+    runs-on: ubuntu-latest
+    steps:
+      - <span class="hl">name</span>: Send webhook
+        run: |
+          curl -X POST <span class="hl">https://you.webhooks.email/hook/YOUR_ENDPOINT_ID</span> \
+            -H "Content-Type: application/json" \
+            -d '{
+              "event": "github.${{ github.event_name }}",
+              "repo": "${{ github.repository }}",
+              "ref": "${{ github.ref }}",
+              "actor": "${{ github.actor }}"
+            }'</pre>
+</div>
+</div>
+</div>
+
+<div class="int-group">
+<div class="int-group-header" onclick="this.nextElementSibling.classList.toggle('open');this.classList.toggle('open')">
+<span class="int-num">05</span><span class="int-name">GitLab CI</span><span class="int-arrow">▾</span>
+</div>
+<div class="int-group-body">
+<div class="code-block">
+<div class="code-header"><span class="code-dot"></span><span class="code-dot"></span><span class="code-dot"></span><span class="code-lang">YAML</span></div>
+<pre><span class="hl">notify-webhook</span>:
+  stage: deploy
+  script:
+    - apt-get update && apt-get install -y curl
+    - curl -X POST <span class="hl">https://you.webhooks.email/hook/YOUR_ENDPOINT_ID</span> \
+        -H "Content-Type: application/json" \
+        -d '{
+          "event": "gitlab.ci",
+          "pipeline_id": "$CI_PIPELINE_ID",
+          "status": "$CI_JOB_STATUS",
+          "branch": "$CI_COMMIT_BRANCH"
+        }'
+  only:
+    - main</pre>
+</div>
+</div>
+</div>
+
+<div class="int-group">
+<div class="int-group-header" onclick="this.nextElementSibling.classList.toggle('open');this.classList.toggle('open')">
+<span class="int-num">06</span><span class="int-name">Pipedream</span><span class="int-arrow">▾</span>
+</div>
+<div class="int-group-body">
+<p class="docs-p">1. Create a new workflow in Pipedream.<br/>
+2. Add an <strong>"HTTP"</strong> trigger or any event source.<br/>
+3. Add a <strong>"Send any request"</strong> action (from the HTTP app).<br/>
+4. Set URL to <code class="inline-code">https://you.webhooks.email/hook/YOUR_ENDPOINT_ID</code>.<br/>
+5. Method: <strong>POST</strong>.<br/>
+6. Add JSON body with <code class="inline-code">$steps.trigger.event</code> data.</p>
+</div>
+</div>
+
+<div class="int-group">
+<div class="int-group-header" onclick="this.nextElementSibling.classList.toggle('open');this.classList.toggle('open')">
+<span class="int-num">07</span><span class="int-name">n8n (Self-hosted)</span><span class="int-arrow">▾</span>
+</div>
+<div class="int-group-body">
+<p class="docs-p">1. Add an <strong>"HTTP Request"</strong> node to your workflow.<br/>
+2. Method: <strong>POST</strong>.<br/>
+3. URL: <code class="inline-code">https://you.webhooks.email/hook/YOUR_ENDPOINT_ID</code>.<br/>
+4. Body: <strong>JSON</strong>, mapped from previous nodes.<br/>
+5. Add header: <code class="inline-code">Content-Type: application/json</code>.<br/>
+6. Execute the workflow.</p>
+</div>
+</div>
+
+<div class="int-group">
+<div class="int-group-header" onclick="this.nextElementSibling.classList.toggle('open');this.classList.toggle('open')">
+<span class="int-num">08</span><span class="int-name">Postman</span><span class="int-arrow">▾</span>
+</div>
+<div class="int-group-body">
+<p class="docs-p">1. Create a new request in Postman.<br/>
+2. Set method to <strong>POST</strong>.<br/>
+3. URL: <code class="inline-code">https://you.webhooks.email/hook/YOUR_ENDPOINT_ID</code>.<br/>
+4. Go to the <strong>Body</strong> tab, select <strong>"raw"</strong> and <strong>"JSON"</strong>.<br/>
+5. Enter your JSON payload.<br/>
+6. Click <strong>"Send"</strong>. Check the response.</p>
+</div>
+</div>
+
+<div class="int-group">
+<div class="int-group-header" onclick="this.nextElementSibling.classList.toggle('open');this.classList.toggle('open')">
+<span class="int-num">09</span><span class="int-name">Python (requests)</span><span class="int-arrow">▾</span>
+</div>
+<div class="int-group-body">
+<div class="code-block">
+<div class="code-header"><span class="code-dot"></span><span class="code-dot"></span><span class="code-dot"></span><span class="code-lang">PYTHON</span></div>
+<pre><span class="hl">import</span> requests
+<span class="hl">import</span> json
+
+response = requests.post(
+    <span class="hl">"https://you.webhooks.email/hook/YOUR_ENDPOINT_ID"</span>,
+    json={
+        <span class="hl">"event"</span>: "python.script",
+        <span class="hl">"data"</span>: {"status": "completed", "result": "ok"},
+    },
+    headers={<span class="hl">"Content-Type"</span>: <span class="hl">"application/json"</span>},
+)
+
+print(response.json())</pre>
+</div>
+</div>
+</div>
+
+<div class="int-group">
+<div class="int-group-header" onclick="this.nextElementSibling.classList.toggle('open');this.classList.toggle('open')">
+<span class="int-num">10</span><span class="int-name">Node.js / JavaScript</span><span class="int-arrow">▾</span>
+</div>
+<div class="int-group-body">
+<div class="code-block">
+<div class="code-header"><span class="code-dot"></span><span class="code-dot"></span><span class="code-dot"></span><span class="code-lang">JAVASCRIPT</span></div>
+<pre><span class="hl">const</span> resp = await fetch(
+  <span class="hl">"https://you.webhooks.email/hook/YOUR_ENDPOINT_ID"</span>,
+  {
+    method: <span class="hl">"POST"</span>,
+    headers: { <span class="hl">"Content-Type"</span>: <span class="hl">"application/json"</span> },
+    body: JSON.stringify({
+      event: <span class="hl">"node.script"</span>,
+      timestamp: Date.now(),
+      data: { message: <span class="hl">"Hello from Node.js!"</span> },
+    }),
+  }
+);
+<span class="hl">const</span> result = await resp.json();
+console.log(result);</pre>
+</div>
+</div>
+</div>
+
+<div class="int-group">
+<div class="int-group-header" onclick="this.nextElementSibling.classList.toggle('open');this.classList.toggle('open')">
+<span class="int-num">11</span><span class="int-name">Bash / Shell Script</span><span class="int-arrow">▾</span>
+</div>
+<div class="int-group-body">
+<div class="code-block">
+<div class="code-header"><span class="code-dot"></span><span class="code-dot"></span><span class="code-dot"></span><span class="code-lang">SHELL</span></div>
+<pre><span class="hl">#!/bin/bash</span>
+
+<span class="cmt"># Send a webhook on deploy or error</span>
+WEBHOOK_URL=<span class="hl">"https://you.webhooks.email/hook/YOUR_ENDPOINT_ID"</span>
+
+curl -X POST <span class="hl">"$WEBHOOK_URL"</span> \
+  -H <span class="hl">"Content-Type: application/json"</span> \
+  -d "$(cat &lt;&lt;EOF
+{
+  "event": "deploy.script",
+  "host": "$(hostname)",
+  "date": "$(date -u +%Y-%m-%dT%H:%M:%SZ)",
+  "status": "success"
+}
+EOF
+)"</pre>
+</div>
+</div>
+</div>
+
+<div class="int-group">
+<div class="int-group-header" onclick="this.nextElementSibling.classList.toggle('open');this.classList.toggle('open')">
+<span class="int-num">12</span><span class="int-name">Email (Direct SMTP)</span><span class="int-arrow">▾</span>
+</div>
+<div class="int-group-body">
+<p class="docs-p">Send an email to <code class="inline-code">anything@you.webhooks.email</code> from any email client — Gmail, Outlook, Apple Mail, or your own SMTP server. Every email is converted to a structured webhook POST to your destinations.</p>
+<p class="docs-p"><strong>No configuration needed.</strong> Just send an email to your endpoint's email alias and we handle the rest.</p>
+<div class="code-block">
+<div class="code-header"><span class="code-dot"></span><span class="code-dot"></span><span class="code-dot"></span><span class="code-lang">SMTP (sendmail)</span></div>
+<pre>echo "Subject: Test from sendmail
+From: you@example.com
+To: <span class="hl">anything@you.webhooks.email</span>
+
+This is a test email that will become a webhook." | sendmail -t</pre>
+</div>
+</div>
+</div>
+
+</div>
+</div>
+
+<div class="docs-meta">
+<div class="meta-box">
+<h4>UNIVERSAL</h4>
+<p>Every integration sends to the same endpoint URL. No per-service configuration needed.</p>
+</div>
+<div class="meta-box">
+<h4>PROTOCOLS</h4>
+<p>HTTP/S POST. Email/SMTP. Any service that can make an HTTP request or send email.</p>
+</div>
+<div class="meta-box">
+<h4>TRANSFORM</h4>
+<p>Use AI transforms to normalize payloads from different sources into a consistent schema.</p>
+</div>
+<div class="meta-box">
+<h4>LIMITS</h4>
+<p>Free: 1,000 webhooks/mo. Pro: 100,000/mo. Enterprise: 5M/mo.</p>
+</div>
+</div>
+</div>
+</section>
+
+<div class="gold-divider"></div>
+
 <!-- ── NEXT STEPS ── -->
 <section class="section cta-section">
 <div class="cta-inner">
@@ -382,6 +669,11 @@ document.addEventListener('mousemove',e=>{const x=(e.clientX/window.innerWidth)*
 function createShard(cls){const s=document.createElement('div');s.className=cls;const sz=Math.random()*30+8;s.style.width=sz+'px';s.style.height=sz+'px';s.style.left=Math.random()*100+'vw';s.style.top=Math.random()*100+'vh';document.body.appendChild(s);let p={x:parseFloat(s.style.left),y:parseFloat(s.style.top)},v={x:(Math.random()-0.5)*0.15,y:(Math.random()-0.5)*0.15};function a(){p.x+=v.x;p.y+=v.y;if(p.x>105)p.x=-5;if(p.x<-5)p.x=105;if(p.y>105)p.y=-5;if(p.y<-5)p.y=105;s.style.left=p.x+'vw';s.style.top=p.y+'vh';requestAnimationFrame(a)}a()}
 for(let i=0;i<12;i++)createShard('shard');
 for(let i=0;i<6;i++)createShard('shard-copper');
+// Open first integration accordion by default
+document.addEventListener('DOMContentLoaded',()=>{
+const first=document.querySelector('.int-group-header');
+if(first){first.classList.add('open');const body=first.nextElementSibling;if(body)body.classList.add('open')}
+});
 </script>
 </body>
 </html>

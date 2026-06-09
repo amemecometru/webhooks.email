@@ -10,6 +10,8 @@
 <link href="https://fonts.googleapis.com/css2?family=Roboto+Serif:ital,wght@0,100;0,400;1,100&family=Inter:wght@400;500;600;700;800&family=JetBrains+Mono:wght@400;500&family=Syne:wght@700;800&display=swap" rel="stylesheet"/>
 <link rel="stylesheet" href="style.css"/>
 <style>
+.stripe-pricing-table{max-width:1200px;margin:0 auto}
+.stripe-embed-placeholder{text-align:center;padding:48px;color:var(--text3);font-size:0.85rem;border:1px solid var(--border);background:var(--surface)}
 .compare-table{max-width:1200px;margin:0 auto;width:100%;border-collapse:collapse;font-size:0.8rem}
 .compare-table th{font-family:var(--font-mono);font-size:0.55rem;letter-spacing:0.15em;color:var(--text3);text-transform:uppercase;padding:16px 20px;border-bottom:1px solid var(--border);text-align:left;font-weight:500}
 .compare-table th:not(:first-child){text-align:center}
@@ -132,6 +134,38 @@
 <p>Extended retention per additional 30 days</p>
 </div>
 </div>
+
+<div class="section-header" style="margin-top:100px" id="stripe-pricing">
+<div class="section-label">// SUBSCRIBE</div>
+<h2 class="section-title">CHOOSE YOUR PLAN.<br/>PAY SECURELY.</h2>
+<p class="section-sub">Stripe-powered checkout. Cancel anytime. No hidden fees.</p>
+</div>
+
+<div class="stripe-pricing-table" id="stripe-pricing-table">
+<div class="stripe-embed-placeholder">
+<p>Loading secure pricing table...</p>
+<div class="loader" style="margin:20px auto"></div>
+</div>
+</div>
+
+<script async src="https://js.stripe.com/v3/pricing-table.js"></script>
+<script>
+document.addEventListener('DOMContentLoaded', () => {
+  const container = document.getElementById('stripe-pricing-table');
+  const key = '{{STRIPE_PUBLISHABLE_KEY}}';
+  const tableId = '{{STRIPE_PRICING_TABLE_ID}}';
+  if (key && tableId && !key.startsWith('{{')) {
+    const el = document.createElement('stripe-pricing-table');
+    el.setAttribute('pricing-table-id', tableId);
+    el.setAttribute('publishable-key', key);
+    el.setAttribute('client-reference-id', 'webhooks-email-site');
+    container.innerHTML = '';
+    container.appendChild(el);
+  } else {
+    container.innerHTML = '<p style="text-align:center;color:var(--text3);font-size:0.8rem;padding:24px;border:1px solid var(--border);background:var(--surface)">Stripe pricing table will appear here after configuration. <a href="https://app.webhooks.email" style="color:var(--gold)">Visit the dashboard</a> to subscribe in the meantime.</p>';
+  }
+});
+</script>
 
 <div class="section-header" style="margin-top:100px">
 <div class="section-label">// FULL COMPARISON</div>

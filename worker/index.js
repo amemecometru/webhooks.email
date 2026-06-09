@@ -37,6 +37,9 @@ const ROUTES = [
   { method: 'GET',   pattern: /^\/api\/scheduled-webhooks$/,         handler: 'listScheduledWebhooks' },
   { method: 'DELETE',pattern: /^\/api\/scheduled-webhooks\/([^\/]+)$/, handler: 'deleteScheduledWebhook' },
 
+  // Sandbox (homepage test email)
+  { method: 'POST',  pattern: /^\/api\/sandbox\/send-test$/, handler: 'sandboxSendTest' },
+
   // Stripe
   { method: 'POST',  pattern: /^\/api\/stripe\/checkout$/, handler: 'stripeCheckout' },
   { method: 'POST',  pattern: /^\/api\/stripe\/portal$/,   handler: 'stripePortal' },
@@ -667,6 +670,45 @@ export default {
     if (h) await h(event.data.object);
 
     return json({ received: true });
+  },
+
+  /* ── Sandbox (homepage test email) ── */
+
+  async sandboxSendTest(request, env) {
+    if (!env.EMAIL_API_KEY) return error('Email service not configured', 501);
+
+    const body = await request.json();
+    const email = body.email;
+    const html = body.html || '';
+    const text = body.text || '';
+
+    if (!email || !email.includes('@')) return error('A valid email address is required');
+    if (!html && !text) return error('HTML or text content is required');
+
+    try {
+      const subject = body.subject || 'Your Test Email from webhooks.email';
+
+      await fetch('https://api.sendgrid.com/v3/mail/send', {
+        method: 'POST',
+        headers: {
+          'Authorization': `Bearer ${env.EMAIL_API_KEY}`,
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({
+          personalizations: [{ to: [{ email }] }],
+          from: { email: env.EMAIL_FROM || 'noreply@webhooks.email', name: 'webhooks.email Sandbox' },
+          subject,
+          content: [
+            { type: 'text/plain', value: text || 'HTML email — view in an HTML-capable email client.' },
+            { type: 'text/html', value: html || `<pre>${text.replace(/</g, '&lt;')}</pre>` },
+          ],
+        }),
+      });
+
+      return json({ status: 'sent', email, message: 'Test email sent! Check your inbox.' });
+    } catch (err) {
+      return error('Failed to send: ' + err.message, 500);
+    }
   },
 
   /* ── Webhook Ingestion (core) ── */

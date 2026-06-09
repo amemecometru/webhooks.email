@@ -184,6 +184,48 @@ OXIDATION_RATE: 0.003%
 
 <div class="gold-divider"></div>
 
+<section class="section sandbox" id="sandbox">
+<div class="section-header">
+<div class="section-label">// SANDBOX</div>
+<h2 class="section-title">TEST YOUR HTML.<br/><span class="foil-drift">IN SECONDS.</span></h2>
+<p class="section-sub">Paste HTML and send a test email to yourself instantly. No signup needed. See how your email renders across clients.</p>
+</div>
+
+<div class="sandbox-inner">
+<form id="sandbox-form" class="sandbox-form">
+<div class="sandbox-field">
+<label for="sandbox-email">YOUR EMAIL</label>
+<input type="email" id="sandbox-email" placeholder="you@example.com" required autocomplete="email"/>
+</div>
+<div class="sandbox-field">
+<label for="sandbox-subject">SUBJECT LINE</label>
+<input type="text" id="sandbox-subject" placeholder="My Test Email" value="Test from webhooks.email"/>
+</div>
+<div class="sandbox-field">
+<label for="sandbox-html">HTML <span style="color:var(--text3);font-weight:400">(paste your email HTML here)</span></label>
+<textarea id="sandbox-html" rows="12" placeholder='&lt;!DOCTYPE html&gt;
+&lt;html&gt;
+&lt;head&gt;&lt;/head&gt;
+&lt;body&gt;
+  &lt;h1&gt;Hello!&lt;/h1&gt;
+  &lt;p&gt;This is a test email.&lt;/p&gt;
+&lt;/body&gt;
+&lt;/html&gt;' spellcheck="false"></textarea>
+</div>
+<div class="sandbox-actions">
+<button type="submit" class="btn-primary" id="sandbox-send-btn">SEND TEST EMAIL</button>
+<span class="sandbox-status" id="sandbox-status"></span>
+</div>
+</form>
+<div class="sandbox-preview" id="sandbox-preview">
+<div class="sandbox-preview-header">LIVE PREVIEW</div>
+<iframe id="sandbox-iframe" class="sandbox-iframe" sandbox="allow-same-origin" srcdoc="<html><body style='background:#0a0a0c;color:#5a5854;font-family:monospace;font-size:14px;padding:40px;text-align:center'><p>Paste HTML above to see a live preview</p></body></html>"></iframe>
+</div>
+</div>
+</section>
+
+<div class="section-divider"></div>
+
 <section class="section pricing">
 <div class="section-header">
 <div class="section-label">// PRICING</div>
@@ -295,7 +337,61 @@ const nav=document.querySelector('nav');
 window.addEventListener('scroll',()=>{nav.style.borderBottomColor=window.scrollY>20?'var(--border)':'transparent'});
 document.querySelectorAll('a[href^="#"]').forEach(a=>{a.addEventListener('click',e=>{const t=document.querySelector(a.getAttribute('href'));if(t){e.preventDefault();t.scrollIntoView({behavior:'smooth',block:'start'})}})});
 const o=new IntersectionObserver(e=>{e.forEach(e=>{if(e.isIntersecting){e.target.style.opacity='1';e.target.style.transform='translateY(0)'}})},{threshold:0.1});
-document.querySelectorAll('.service-card,.plan-card,.how-step').forEach(e=>{e.style.opacity='0';e.style.transform='translateY(20px)';e.style.transition='opacity 0.6s cubic-bezier(0.16,1,0.3,1),transform 0.6s cubic-bezier(0.16,1,0.3,1)';o.observe(e)})
+document.querySelectorAll('.service-card,.plan-card,.how-step,.sandbox-inner').forEach(e=>{e.style.opacity='0';e.style.transform='translateY(20px)';e.style.transition='opacity 0.6s cubic-bezier(0.16,1,0.3,1),transform 0.6s cubic-bezier(0.16,1,0.3,1)';o.observe(e)})
+});
+
+// Sandbox: live preview
+document.addEventListener('DOMContentLoaded', () => {
+  const htmlInput = document.getElementById('sandbox-html');
+  const iframe = document.getElementById('sandbox-iframe');
+  let previewTimer;
+  if (htmlInput && iframe) {
+    htmlInput.addEventListener('input', () => {
+      clearTimeout(previewTimer);
+      previewTimer = setTimeout(() => {
+        iframe.srcdoc = htmlInput.value || "<html><body style='background:#0a0a0c;color:#5a5854;font-family:monospace;font-size:14px;padding:40px;text-align:center'><p>Paste HTML above to see a live preview</p></body></html>";
+      }, 300);
+    });
+  }
+
+  // Sandbox: send test email
+  const form = document.getElementById('sandbox-form');
+  const status = document.getElementById('sandbox-status');
+  const sendBtn = document.getElementById('sandbox-send-btn');
+  if (form) {
+    form.addEventListener('submit', async (e) => {
+      e.preventDefault();
+      const email = document.getElementById('sandbox-email').value.trim();
+      const subject = document.getElementById('sandbox-subject').value.trim() || 'Test from webhooks.email';
+      const html = document.getElementById('sandbox-html').value.trim();
+
+      if (!email) { status.textContent = 'Please enter your email address'; status.className = 'sandbox-status visible error'; return; }
+      if (!html) { status.textContent = 'Please paste some HTML'; status.className = 'sandbox-status visible error'; return; }
+
+      sendBtn.disabled = true;
+      sendBtn.textContent = 'SENDING...';
+      status.textContent = '';
+      status.className = 'sandbox-status';
+
+      try {
+        const resp = await fetch('https://api.webhooks.email/api/sandbox/send-test', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ email, subject, html }),
+        });
+        const data = await resp.json();
+        if (!resp.ok) throw new Error(data.error || 'Send failed');
+        status.textContent = '✓ Sent! Check your inbox.';
+        status.className = 'sandbox-status visible';
+      } catch (err) {
+        status.textContent = '✕ ' + err.message;
+        status.className = 'sandbox-status visible error';
+      } finally {
+        sendBtn.disabled = false;
+        sendBtn.textContent = 'SEND TEST EMAIL';
+      }
+    });
+  }
 });
 </script>
 </body>

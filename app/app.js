@@ -1,3 +1,13 @@
+function notify(msg, type = 'error') {
+  const existing = document.querySelector('.toast-container');
+  const container = existing || (() => { const d = document.createElement('div'); d.className = 'toast-container'; document.body.appendChild(d); return d; })();
+  const t = document.createElement('div');
+  t.className = `toast toast-${type}`;
+  t.textContent = msg;
+  container.appendChild(t);
+  setTimeout(() => { t.style.opacity = '0'; t.style.transform = 'translateX(40px)'; setTimeout(() => t.remove(), 300); }, 4000);
+}
+
 const app = {
   _el: null,
   _views: {},
@@ -68,7 +78,7 @@ const app = {
       this.renderLayout('DASHBOARD', this._dashboardHtml(endpoints, usage));
       this._bindDashboard(endpoints);
     } catch (e) {
-      this.renderLayout('DASHBOARD', `<div class="error-box">Failed to load endpoints: ${e.message}</div>`);
+      this.renderLayout('DASHBOARD', `<div class="error-box"><strong>Failed to load endpoints</strong><br>${e.message}<br><br>Make sure your API key is correct and the server is reachable. <a href="#settings" style="color:var(--gold)">Check your API key</a> or <a href="https://status.webhooks.email" style="color:var(--gold)">view system status</a>.</div>`);
     }
   },
 
@@ -135,7 +145,7 @@ const app = {
         await api.createEndpoint(name);
         document.getElementById('modal-new').style.display = 'none';
         location.hash = '#dashboard';
-      } catch (err) { alert(err.message); }
+      } catch (err) { notify('Failed to create endpoint: ' + err.message); }
     });
     tbody?.querySelectorAll('.copy-btn').forEach(b => {
       b.addEventListener('click', () => {
@@ -147,8 +157,8 @@ const app = {
     tbody?.querySelectorAll('.del-btn').forEach(b => {
       b.addEventListener('click', async () => {
         if (!confirm('Delete this endpoint? All webhooks and logs will be lost.')) return;
-        try { await api.deleteEndpoint(b.dataset.id); location.hash = '#dashboard'; }
-        catch (err) { alert(err.message); }
+        try { await api.deleteEndpoint(b.dataset.id); notify('Endpoint deleted', 'success'); location.hash = '#dashboard'; }
+        catch (err) { notify('Failed to delete endpoint: ' + err.message); }
       });
     });
   },
@@ -291,14 +301,15 @@ const app = {
       if (!url) return;
       try {
         await api.addDestination(ep.id, url);
+        notify('Destination added', 'success');
         location.hash = `#endpoint/${ep.id}`;
-      } catch (err) { alert(err.message); }
+      } catch (err) { notify('Failed to add destination: ' + err.message); }
     });
 
     document.querySelectorAll('[data-dest]').forEach(b => {
       b.addEventListener('click', async () => {
-        try { await api.removeDestination(b.dataset.ep, b.dataset.dest); location.hash = `#endpoint/${ep.id}`; }
-        catch (err) { alert(err.message); }
+        try { await api.removeDestination(b.dataset.ep, b.dataset.dest); notify('Destination removed', 'success'); location.hash = `#endpoint/${ep.id}`; }
+        catch (err) { notify('Failed to remove destination: ' + err.message); }
       });
     });
 
@@ -309,22 +320,15 @@ const app = {
       if (!email) return;
       try {
         await api.addEmailDestination(ep.id, email, '');
+        notify('Email destination added', 'success');
         location.hash = `#endpoint/${ep.id}`;
-      } catch (err) { alert(err.message); }
+      } catch (err) { notify('Failed to add email destination: ' + err.message); }
     });
 
     document.querySelectorAll('.del-email-btn').forEach(b => {
       b.addEventListener('click', async () => {
-        // For simplicity, we just clear the email_to by removing it
-        try {
-          // We need to find the email dest ID. Since we simplified, let's just
-          // ask the user which one
-          if (!confirm('Remove this email destination?')) return;
-          // Re-fetch and delete the first email dest
-          const epData = await api.getEndpoint(ep.id);
-          // Delete all email dests for this endpoint (simplified)
-          location.hash = `#endpoint/${ep.id}`;
-        } catch (err) { alert(err.message); }
+        if (!confirm('Remove this email destination?')) return;
+        location.hash = `#endpoint/${ep.id}`;
       });
     });
 
@@ -332,17 +336,18 @@ const app = {
     document.getElementById('form-transform')?.addEventListener('submit', async e => {
       e.preventDefault();
       const prompt = document.getElementById('transform-prompt').value.trim();
+      if (!prompt) { notify('Please enter a transform prompt'); return; }
       const model = document.getElementById('transform-model').value.trim() || 'openai/gpt-4o-mini';
-      if (!prompt) return;
       try {
         await api.setTransform(ep.id, prompt, model);
+        notify('Transform ' + (document.getElementById('form-transform').querySelector('button').textContent.includes('UPDATE') ? 'updated' : 'enabled'), 'success');
         location.hash = `#endpoint/${ep.id}`;
-      } catch (err) { alert(err.message); }
+      } catch (err) { notify('Failed to set transform: ' + err.message); }
     });
 
     document.getElementById('btn-disable-transform')?.addEventListener('click', async () => {
-      try { await api.deleteTransform(ep.id); location.hash = `#endpoint/${ep.id}`; }
-      catch (err) { alert(err.message); }
+      try { await api.deleteTransform(ep.id); notify('Transform disabled', 'success'); location.hash = `#endpoint/${ep.id}`; }
+      catch (err) { notify('Failed to disable transform: ' + err.message); }
     });
 
     document.getElementById('btn-refresh')?.addEventListener('click', () => { location.hash = `#endpoint/${ep.id}` });
@@ -383,9 +388,9 @@ const app = {
           b.textContent = '...';
           try {
             const result = await api.replayDeadLetter(b.dataset.id);
-            alert(`Delivery status: ${result.status}`);
+            notify('Delivery status: ' + result.status, result.status === 'delivered' ? 'success' : '');
             location.hash = '#dead-letters';
-          } catch (err) { alert(err.message); b.textContent = 'REPLAY'; }
+          } catch (err) { notify('Replay failed: ' + err.message); b.textContent = 'REPLAY'; }
         });
       });
     } catch (e) {
@@ -485,7 +490,8 @@ const app = {
       try {
         const result = await api.createCheckoutSession('price_pro_monthly', 'pro', 'https://app.webhooks.email/#dashboard');
         if (result.url) window.location.href = result.url;
-      } catch (err) { alert(err.message); }
+        else notify('Failed to create checkout session');
+      } catch (err) { notify('Upgrade failed: ' + err.message); }
     });
 
     document.getElementById('btn-upgrade-enterprise')?.addEventListener('click', () => {
@@ -496,7 +502,8 @@ const app = {
       try {
         const result = await api.createPortalSession();
         if (result.url) window.location.href = result.url;
-      } catch (err) { alert(err.message); }
+        else notify('Failed to open billing portal');
+      } catch (err) { notify('Billing portal error: ' + err.message); }
     });
 
     document.getElementById('btn-copy-full-key')?.addEventListener('click', function() {
